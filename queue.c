@@ -23,10 +23,11 @@ queue_t *q_new()
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
-    assert(q);
-    list_ele_t *prev = NULL;
+    if (!q)
+        return;
+
     while (q->head) {
-        prev = q->head;
+        list_ele_t *prev = q->head;
         q->head = q->head->next;
         free(prev->value);
         free(prev);
@@ -91,9 +92,18 @@ bool q_insert_tail(queue_t *q, char *s)
  */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    /* TODO: You need to fix up this code. */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || !q->head)
+        return false;
+
+    if (sp) {
+        memset(sp, '\0', bufsize);
+        strncpy(sp, q->head->value, bufsize - 1);
+    }
+    list_ele_t *tmp = q->head;
     q->head = q->head->next;
+    q->size--;
+    free(tmp->value);
+    free(tmp);
     return true;
 }
 
