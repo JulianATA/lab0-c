@@ -93,4 +93,9 @@ void q_reverse(queue_t *q);
  */
 void q_sort(queue_t *q);
 
+/*
+ * Initialize a new queue element
+ */
+list_ele_t *q_new_element(char *s);
+
 #endif /* LAB0_QUEUE_H */

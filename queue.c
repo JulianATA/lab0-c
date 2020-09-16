@@ -44,13 +44,16 @@ void q_free(queue_t *q)
  */
 bool q_insert_head(queue_t *q, char *s)
 {
-    list_ele_t *newh;
-    /* TODO: What should you do if the q is NULL? */
-    newh = malloc(sizeof(list_ele_t));
-    /* Don't forget to allocate space for the string and copy it */
-    /* What if either call to malloc returns NULL? */
-    newh->next = q->head;
-    q->head = newh;
+    if (!q)
+        return false;
+    list_ele_t *new_element = q_new_element(s);
+    if (!new_element)
+        return false;
+    new_element->next = q->head;
+    if (q->head == NULL)
+        q->tail = new_element;
+    q->head = new_element;
+    q->size++;
     return true;
 }
 
@@ -85,7 +88,16 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     return true;
 }
 
-/*
+/*    if (!q)
+        return false;
+
+    new_element->value = new_value;
+    new_element->next = q->head;
+    if (q->head == NULL)
+        q->tail = new_element;
+    q->head = new_element;
+    q->size++;
+    return true;
  * Return number of elements in queue.
  * Return 0 if q is NULL or empty
  */
@@ -119,4 +131,23 @@ void q_sort(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+}
+
+/*
+ * Initialize a new queue element
+ */
+list_ele_t *q_new_element(char *s)
+{
+    list_ele_t *new_element = malloc(sizeof(list_ele_t));
+    if (!new_element)
+        return NULL;
+    char *new_value = malloc((strlen(s) + 1) * sizeof(char));
+    if (!new_value) {
+        free(new_element);
+        return NULL;
+    }
+    memset(new_value, '\0', strlen(s) + 1);
+    strncpy(new_value, s, strlen(s) + 1);
+    new_element->value = new_value;
+    return new_element;
 }
