@@ -98,4 +98,9 @@ void q_sort(queue_t *q);
  */
 list_ele_t *q_new_element(char *s);
 
+/*
+ * Recursively, reverse elements in list.
+ */
+list_ele_t *q_element_reverse(list_ele_t *head);
+
 #endif /* LAB0_QUEUE_H */
