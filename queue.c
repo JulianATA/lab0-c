@@ -97,16 +97,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     return true;
 }
 
-/*    if (!q)
-        return false;
-
-    new_element->value = new_value;
-    new_element->next = q->head;
-    if (q->head == NULL)
-        q->tail = new_element;
-    q->head = new_element;
-    q->size++;
-    return true;
+/*
  * Return number of elements in queue.
  * Return 0 if q is NULL or empty
  */
