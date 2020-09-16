@@ -6,7 +6,7 @@
 #include "queue.h"
 
 /*
- * Create empty queue.
+ * Create an empty queue.
  * Return NULL if could not allocate space.
  */
 queue_t *q_new()
