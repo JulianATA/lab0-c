@@ -129,8 +129,19 @@ void q_reverse(queue_t *q)
 {
     if (!q || !q->head || !q->head->next)
         return;
+
+    list_ele_t *prev = NULL;
+    list_ele_t *curr = q->head;
+    list_ele_t *next = q->head->next;
     q->tail = q->head;
-    q->head = q_element_reverse(q->head);
+    while (next) {
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+        next = next->next;
+    }
+    curr->next = prev;
+    q->head = curr;
 }
 
 list_ele_t *q_element_reverse(list_ele_t *head)
@@ -143,6 +154,54 @@ list_ele_t *q_element_reverse(list_ele_t *head)
     head->next = NULL;
     return rest;
 }
+
+list_ele_t *q_list_tail(list_ele_t *head)
+{
+    if (!head)
+        return NULL;
+    list_ele_t *tail = head;
+    while (tail->next)
+        tail = tail->next;
+    return tail;
+}
+
+void merge_sort(list_ele_t **head, size_t size)
+{
+    if (!(*head) || !((*head)->next))
+        return;
+
+    list_ele_t *rhead = (*head)->next;
+    list_ele_t *lhead = *head;
+
+    for (int i = 0; i < (size >> 1) - 1; i++) {
+        rhead = rhead->next;
+        lhead = lhead->next;
+    }
+    lhead->next = NULL;
+    lhead = *head;
+
+    merge_sort(&lhead, size >> 1);
+    if (size % 2 == 1)
+        merge_sort(&rhead, (size >> 1) + 1);
+    else
+        merge_sort(&rhead, size >> 1);
+
+    *head = NULL;
+    list_ele_t **tmp = head;
+
+    while (rhead && lhead) {
+        if (strcmp(rhead->value, lhead->value) < 0) {
+            *tmp = rhead;
+            rhead = rhead->next;
+        } else {
+            *tmp = lhead;
+            lhead = lhead->next;
+        }
+        tmp = &((*tmp)->next);
+    }
+
+    *tmp = rhead ? rhead : lhead;
+}
 /*
  * Sort elements of queue in ascending order
  * No effect if q is NULL or empty. In addition, if q has only one
@@ -150,8 +209,10 @@ list_ele_t *q_element_reverse(list_ele_t *head)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || !q->head || !q->head->next)
+        return;
+    merge_sort(&q->head, q->size);
+    q->tail = q_list_tail(q->head);
 }
 
 /*
